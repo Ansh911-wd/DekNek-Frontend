@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // ✅ add useEffect
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 
@@ -10,18 +10,23 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  // AUTO REDIRECT IF ALREADY LOGGED IN
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/dashboard");
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const res = await API.post("/api/auth/login", form);
 
-      
       localStorage.setItem("token", res.data.token);
 
       alert("Login successful");
 
-    
       navigate("/dashboard");
 
     } catch (err) {
@@ -30,27 +35,27 @@ export default function Login() {
   };
 
   return (
-  <div className="container">
-  <form className="card" onSubmit={handleSubmit}>
-    <h2>Login</h2>
+    <div className="container">
+      <form className="card" onSubmit={handleSubmit}>
+        <h2>Login</h2>
 
-    <input
-      placeholder="Email"
-      onChange={(e) =>
-        setForm({ ...form, email: e.target.value })
-      }
-    />
+        <input
+          placeholder="Email"
+          onChange={(e) =>
+            setForm({ ...form, email: e.target.value })
+          }
+        />
 
-    <input
-      type="password"
-      placeholder="Password"
-      onChange={(e) =>
-        setForm({ ...form, password: e.target.value })
-      }
-    />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) =>
+            setForm({ ...form, password: e.target.value })
+          }
+        />
 
-    <button>Login</button>
-  </form>
-</div>
+        <button>Login</button>
+      </form>
+    </div>
   );
 }

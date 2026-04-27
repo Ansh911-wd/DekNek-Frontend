@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -11,14 +12,23 @@ export default function Navbar() {
   return (
     <div className="navbar">
       <div className="nav-left">
-        <Link to="/">Login</Link>
-        <Link to="/signup">Signup</Link>
-        <Link to="/dashboard">Dashboard</Link>
+        {!token && (
+          <>
+            <Link to="/">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </>
+        )}
+
+        {token && (
+          <Link to="/dashboard">Dashboard</Link>
+        )}
       </div>
 
-      <button className="logout-btn" onClick={logout}>
-        Logout
-      </button>
+      {token && (
+        <button className="logout-btn" onClick={logout}>
+          Logout
+        </button>
+      )}
     </div>
   );
 }

@@ -20,6 +20,7 @@ export default function Signup() {
       alert("Signup successful");
 
       // 
+      
       navigate("/");
 
     } catch (err) {
